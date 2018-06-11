@@ -21,7 +21,7 @@
         <activity android:name=".CompanyActivity" />
         <activity android:name=".FindCategoryActivity" />
         <activity android:name=".QueuesActivity" />
-        <activity android:name=".TimeSlotsActivity"></activity>
+        <activity android:name=".TimeSlotsActivity" android:label="Enroll to queue"></activity>
     </application>
 
 </manifest>

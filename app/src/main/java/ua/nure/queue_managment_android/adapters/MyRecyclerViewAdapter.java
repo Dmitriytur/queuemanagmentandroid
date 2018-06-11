@@ -8,17 +8,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ua.nure.queue_managment_android.R;
+import ua.nure.queue_managment_android.model.TimeSlotEntity;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
-    private String[] mData = new String[0];
+    private TimeSlotEntity[] timeSlots;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    private TimeSlotEntity selectedSlot;
 
     // data is passed into the constructor
-    public MyRecyclerViewAdapter(Context context, String[] data) {
+    public MyRecyclerViewAdapter(Context context, TimeSlotEntity[] data) {
         this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+        this.timeSlots = data;
+        this.selectedSlot = null;
     }
 
     // inflates the cell layout from xml when needed
@@ -31,14 +34,21 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // binds the data to the textview in each cell
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String animal = mData[position];
-        holder.myTextView.setText(animal);
+        TimeSlotEntity currentSlot = timeSlots[position];
+        holder.myTextView.setText(currentSlot.getStartTime());
+        if (currentSlot.equals(selectedSlot)) {
+            holder.myTextView.setBackgroundColor(holder.myTextView.getContext().getResources().getColor(R.color.selected_slot));
+        }
+        if (currentSlot.getClient() != null) {
+            holder.myTextView.setBackgroundColor(holder.myTextView.getContext().getResources().getColor(R.color.occupied_slot));
+        }
+
     }
 
     // total number of cells
     @Override
     public int getItemCount() {
-        return mData.length;
+        return timeSlots.length;
     }
 
 
@@ -60,7 +70,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     // convenience method for getting data at click position
     String getItem(int id) {
-        return mData[id];
+        return timeSlots[id].getStartTime();
     }
 
     // allows clicks events to be caught
@@ -71,5 +81,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+    }
+
+    public void setSelectedSlot(TimeSlotEntity selectedSlot) {
+        if (selectedSlot.getClient() == null) {
+            this.selectedSlot = selectedSlot;
+        }
+    }
+
+    public TimeSlotEntity getSelectedSlot() {
+        return selectedSlot;
     }
 }
