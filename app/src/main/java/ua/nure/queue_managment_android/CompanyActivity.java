@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Base64;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import ua.nure.queue_managment_android.model.CompanyEntity;
@@ -30,8 +31,8 @@ public class CompanyActivity extends AppCompatActivity {
         TextView textName = findViewById(R.id.company_details_name);
         textName.setText(company.getName());
 
-        TextView textDescription = findViewById(R.id.company_details_description);
-        textDescription.setText(Html.fromHtml(company.getDescription(),  new CustomImageGetter(), null));
+        WebView webDescription = findViewById(R.id.company_description);
+        webDescription.loadData(company.getDescription(), "text/html", "UTF-8");
 
 
 
@@ -49,7 +50,7 @@ public class CompanyActivity extends AppCompatActivity {
         public Drawable getDrawable(String source) {
             byte[] decodedString = Base64.decode(source, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            return new BitmapDrawable(decodedByte);
+            return new BitmapDrawable(BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
         }
     }
 }
